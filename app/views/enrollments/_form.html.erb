@@ -1,0 +1,84 @@
+<%= form_with(model: enrollment) do |form| %>
+  <% if enrollment.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(enrollment.errors.count, "error") %> prohibited this enrollment from being saved:</h2>
+
+      <ul>
+        <% enrollment.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <% if current_user.student? %>
+    <div class="mb-3">
+      <label>Select School</label>
+      <%= select_tag "school_select", options_from_collection_for_select(School.all, "id", "name"), prompt: "Select School", class: 'form-select form-select-lg mb-3' %>
+    </div>
+    <div class="mb-3">
+      <label>Select Course</label>
+      <%= select_tag "course_select", options_from_collection_for_select([], "id", "name"), class: 'form-select form-select-lg mb-3' %>
+    </div>
+    <div class="mb-3">
+      <%= form.label :batch_id %>
+      <%= form.select :batch_id, [] , {}, class: 'form-select form-select-lg mb-3 batch-select' %>
+    </div>
+  <% else %>
+    <div class="mb-3">
+      <%= form.label :status %>
+      <%= form.select :status, Enrollment.statuses.reject {|l| l == 'pending'}.map { |key, value| [key.humanize, key] } , {}, class: 'form-select form-select-lg mb-3' %>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= form.submit class: "btn btn-primary" %>
+  </div>
+<% end %>
+<script type="text/javascript">
+  $('#school_select').change(function(){
+    if($(this).val() == ''){
+      $("#course_select").prop("disabled", true);
+    }else{
+      $("#course_select").prop("disabled", false);
+    }
+    $.ajax({
+      url: "/batches/related_courses",
+      method: "GET",  
+      dataType: "json",
+      data: {school_id: $(this).val()},
+      error: function (xhr, status, error) {
+          console.error('AJAX Error: ' + status + error);
+      },
+      success: function (response) {
+          var courses = response;
+          $("#course_select").empty();
+
+          $("#course_select").append('<option>Select Course</option>');
+          for(var i = 0; i < courses.length; i++){
+            $("#course_select").append('<option value="' + courses[i]["id"] + '">' +courses[i]["name"] + '</option>');
+          }
+      }
+    });
+  });
+
+  $('#course_select').change(function(){
+    $.ajax({
+      url: "/batches/related_batches",
+      method: "GET",  
+      dataType: "json",
+      data: {course_id: $(this).val()},
+      error: function (xhr, status, error) {
+          console.error('AJAX Error: ' + status + error);
+      },
+      success: function (response) {
+        var batches = response;
+        $(".batch-select").empty();
+
+        $(".batch-select").append('<option>Select Batch</option>');
+        for(var i = 0; i < batches.length; i++){
+          $(".batch-select").append('<option value="' + batches[i]["id"] + '">' +batches[i]["name"] + '</option>');
+        }
+      }
+    });
+  });
+</script>>

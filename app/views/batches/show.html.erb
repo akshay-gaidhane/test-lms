@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @batch.name %>
+</p>
+
+<p>
+  <strong>Start time:</strong>
+  <%= @batch.start_time %>
+</p>
+
+<p>
+  <strong>End time:</strong>
+  <%= @batch.end_time %>
+</p>
+
+<p>
+  <strong>Every day:</strong>
+  <%= @batch.every_day %>
+</p>
+
+<p>
+  <strong>Course:</strong>
+  <%= @batch.course_id %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @batch.user_id %>
+</p>
+
+<%= link_to 'Edit', edit_batch_path(@batch) %> |
+<%= link_to 'Back', batches_path %>

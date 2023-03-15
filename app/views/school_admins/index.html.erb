@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+
+<h1>School Admins</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Name</th>
+      <th scope="col">School Admin</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @school_admins.each do |school| %>
+      <tr>
+        <td><%= school.id %></td>
+        <td><%= school.name %></td>
+        <td><%= school.school_admin_email %></td>
+        <td><%= link_to 'Assign School Admin', edit_school_admin_path(school) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>

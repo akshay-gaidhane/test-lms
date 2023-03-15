@@ -1,0 +1,37 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Batches</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Start time</th>
+      <th>End time</th>
+      <th>Every day</th>
+      <th>Course</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @batches.each do |batch| %>
+      <tr>
+        <td><%= batch.name %></td>
+        <td><%= batch.start_time %></td>
+        <td><%= batch.end_time %></td>
+        <td><%= batch.every_day %></td>
+        <td><%= batch.course_id %></td>
+        <% unless current_user.student? %>
+          <td><%= link_to 'Show', batch %></td>
+          <td><%= link_to 'Edit', edit_batch_path(batch) %></td>
+          <td><%= link_to 'Destroy', batch, data: { 'method': :delete, 'confirm': "Are you sure?" } %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Batch', new_batch_path unless current_user.student?  %>

@@ -1,6 +1,6 @@
 class Course < ApplicationRecord
   belongs_to :school
-  has_many :batches
+  has_many :batches, dependent: :destroy
 
   validates :name, presence: true, length: { minimum: 5 }, uniqueness: true
 

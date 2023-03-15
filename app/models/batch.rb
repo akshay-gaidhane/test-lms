@@ -1,6 +1,6 @@
 class Batch < ApplicationRecord
   belongs_to :course
-  has_many :enrollments
+  has_many :enrollments, dependent: :destroy
 
   validates_presence_of :start_time, :end_time, :name
   validates :name, length: { minimum: 5 }, uniqueness: true
